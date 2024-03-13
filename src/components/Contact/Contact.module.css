@@ -1,0 +1,32 @@
+.card {
+  display: flex;
+  gap: 32px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.number {
+  text-align: start;
+  font-size: 16px;
+  line-height: 1.2;
+}
+
+.name {
+  text-align: start;
+  font-size: 18px;
+  line-height: 1.2;
+}
+
+.button {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 5px;
+  background-color: rgb(252, 107, 107);
+  color: white;
+  font-weight: 500;
+  width: 100px;
+
+  &:disabled {
+    background-color: grey;
+  }
+}
