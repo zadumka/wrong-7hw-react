@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import { createSelector } from 'reselect';
 
 import { selectNameFilter } from './filtersSlice';
-import { fetchContacts, addContact, deleteContact } from './contactsOps';
+import { getContacts, addContact, getContacts } from './contactsOps';
 
 const handlePending = state => {
   state.loading = true;
@@ -15,41 +15,41 @@ const handleRejected = (state, { payload }) => {
 
 const contactsSlice = createSlice({
   name: 'contacts',
-  initialState: { items: [], loading: false, error: null },
+  initialState: { contacts: [], isLoading: false, isError: null },
   extraReducers: builder => {
     builder
-      .addCase(fetchContacts.pending, handlePending)
-      .addCase(fetchContacts.rejected, handleRejected)
-      .addCase(fetchContacts.fulfilled, (state, { payload }) => {
-        state.loading = false;
-        state.items = payload;
-        state.error = null;
+      .addCase(getContacts.pending, handlePending)
+      .addCase(getContacts.rejected, handleRejected)
+      .addCase(getContacts.fulfilled, (state, { payload }) => {
+        state.isLoading = false;
+        state.contacts = payload;
+        state.isError = null;
       })
 
       .addCase(addContact.pending, handlePending)
       .addCase(addContact.rejected, handleRejected)
       .addCase(addContact.fulfilled, (state, { payload }) => {
-        state.loading = false;
-        state.error = null;
-        state.items.push(payload);
+        state.isLoading = false;
+        state.isError = null;
+        state.contacts.push(payload);
       })
 
-      .addCase(deleteContact.pending, handlePending)
-      .addCase(deleteContact.rejected, handleRejected)
-      .addCase(deleteContact.fulfilled, (state, { payload }) => {
-        state.loading = false;
-        state.error = null;
-        const index = state.items.findIndex(({ id }) => id === payload.id);
-        state.items.splice(index, 1);
+      .addCase(removeContact.pending, handlePending)
+      .addCase(removeContact.rejected, handleRejected)
+      .addCase(getContacts.fulfilled, (state, { payload }) => {
+        state.isLoading = false;
+        state.isError = null;
+        const index = state.contacts.findIndex(({ id }) => id === payload.id);
+        state.contacts.splice(index, 1);
       });
   },
 });
 
 export const contactsReducer = contactsSlice.reducer;
 
-export const selectContacts = state => state.contacts.items;
-export const selectLoading = state => state.contacts.loading;
-export const selectError = state => state.contacts.error;
+export const selectContacts = state => state.contacts.contacts;
+export const selectLoading = state => state.contacts.isLoading;
+export const selectError = state => state.contacts.isError;
 
 export const selectFilteredContacts = createSelector(
   [selectContacts, selectNameFilter],
